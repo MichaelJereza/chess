@@ -1,0 +1,26 @@
+*{
+    background: darkslategrey;
+}
+.sqr{
+    display: inline-block;
+    min-width: 40px;
+    min-height: 40px;
+    text-align: center;
+}
+.B{
+    background: black;
+    color: white;
+}
+.W{
+    background: white;
+    color: black;
+}
+#game_board{
+    border: 2px solid red;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    margin:0 33%;
+    width: 320px;
+    height: 320px
+}
