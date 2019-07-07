@@ -11,12 +11,12 @@ var port = process.env.PORT || 3000
 app.use(express.static('public'))
 
 //DIMENSIONS
-var max_rows = 8
-var max_cols = 8
+var max_rows = 8,
+    max_cols = 8,
+    board = []
 
-var board = []
 for(var i=0; i<max_rows; i++){
-    board[i]= new Array(8);
+    board[i]= new Array(8).fill(' ');
 }
 
 //This function initializes an array to have formatting for black and white spaces.
