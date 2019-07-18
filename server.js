@@ -11,66 +11,96 @@ var port = process.env.PORT || 3000
 app.use(express.static('public'))
 
 //DIMENSIONS
-var max_rows = 8,
-    max_cols = 8,
-    board = []
-
-for(var i=0; i<max_rows; i++){
-    board[i]= new Array(8).fill(' ');
-}
+var board = new Array(64);
 
 //This function initializes an array to have formatting for black and white spaces.
-function init(board,rm,cm){
-    for(var r=0;r<rm;r++){        
-        for(var c=0;c<cm;c++){
-            //if even row even col OR odd row odd col
-            if((c%2==0 && r%2==0)||(c%2!=0 && r%2!=0)){
-                board[r][c]={space: 'B', item: ' '};
+function init(board){
+    var a,b;
+    a={space: 'B', item: ' '};
+    b={space: 'W', item: ' '};
+    var j=0;
+    for(var r=0;r<64;r++){
+        if(r%2==j){
+            board[r]={space: 'B', item: ' ', coord: r};
+        }
+        else{
+            board[r]={space: 'W', item: ' ', coord: r};
+        }
+        if((r+1)%8==0){
+            if(j==0){
+                j=1;
             }
             else{
-                board[r][c]={space: 'W', item: ' '};
+                j=0;
             }
+            // b = [a, a = b][0]; //swap
         }
     }
 }
-init(board,max_rows,max_cols);
 
 function setup_board(board){
-    max=board[0].length;
-    for(var i=0;i<max;i++){
-        board[1][i].item='♙';
-        board[max-2][i].item='♟';
-        if(i==0||i==(max-1)){
-            board[0][i].item='♖';
-            board[max-1][i].item='♜';
+    var j=8;
+    for(var i=0;i<j;i++){
+        if(i==0||i==7){
+            board[i].item='♜';
         }
-        else if(i==1||i==(max-2)){
-            board[0][i].item='♘';
-            board[max-1][i].item='♞';
+        else if(i==1||i==6){
+            board[i].item='♞';
         }
-        else if(i==2||i==(max-3)){
-            board[0][i].item='♗';
-            board[max-1][i].item='♝';
+        else if(i==2||i==5){
+            board[i].item='♝';
         }
         else if(i==3){
-            board[0][i].item='♕';
-            board[max-1][i].item='♛';
+            board[i].item='♛';
         }
         else if(i==4){
-            board[0][i].item='♔';
-            board[max-1][i].item='♚';
-        }        
+            board[i].item='♚';
+        }
+
+        if(i==7){
+            j+=8;
+        }
+        if(i<16&&i>7){
+            board[i].item='♟';
+        }
+
+        if(i==15){
+            j=64;
+            i=48;
+        }
+        if(i<56&&i>47){
+            board[i].item='♙';
+        }
+        else if(i==57||i==62){
+            board[i].item='♘';
+        }
+        else if(i==58||i==61){
+            board[i].item='♗';
+        }
+        else if(i==59){
+            board[i].item='♕';
+        }
+        else if(i==60){
+            board[i].item='♔';
+        }
+        else if(i==56||i==63){
+            board[i].item='♖';
+        }
     }
+
+    console.log("BOARD: ", board);
 }
+
+init(board);
 setup_board(board);
 
-console.log("BOARD:", board)
+
 app.get('/', function(req, res){
     res.status(200).render('board', {
-        board_rows: board
-    })
-    console.log("done")
+        board: board
+    });
+    console.log("done");
 })
 app.listen(port, function(){
-    console.log("Server running...")
+    console.log("Server running...");
 })
