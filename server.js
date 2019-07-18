@@ -94,7 +94,15 @@ function setup_board(board){
 init(board);
 setup_board(board);
 
-
+app.post('/move/:x/:y', function(req,res,next){
+    var to=req.params.y,
+        from=req.params.x;
+    board[to].item=board[from].item;
+    board[from].item=' ';
+    console.log('====' ,board);
+    res.send("Moved");
+    next();
+})
 app.get('/', function(req, res){
     res.status(200).render('board', {
         board: board

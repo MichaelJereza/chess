@@ -12,25 +12,19 @@
 .B{
     background: black;
     color: white;
-    border: 2px solid black;
+    border: 2px solid rgba(0 0 0 1);
 }
 .W{
     background: white;
     color: black;
-    border: 2px solid white;
+    border: 2px solid rgba(0 0 0 1);
 }
 .Selected{
     background: yellow;
     color: black;
-}
-.W + .Selected{
-    border:2px solid black;
-}
-.B + .Selected{
-    border: 2px solid white;
+    border: 2px solid rgba(0 0 0 1);
 }
 .Possible{
-    border: 2px solid inherit;
     background: lightseagreen;
 }
 #game_board{
