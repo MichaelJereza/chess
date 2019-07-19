@@ -99,7 +99,7 @@ app.post('/move/:x/:y', function(req,res,next){
         from=req.params.x;
     board[to].item=board[from].item;
     board[from].item=' ';
-    console.log('====' ,board);
+    console.log(board[to], 'moved', board[from]);
     res.send("Moved");
     next();
 })
