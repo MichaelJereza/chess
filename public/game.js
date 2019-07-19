@@ -1,5 +1,4 @@
 var turn;
-var selection=false;
 
 var reload = new XMLHttpRequest();
 reload.open("GET","/", true);
@@ -8,33 +7,47 @@ reload.open("GET","/", true);
 var board = document.getElementById('game_board');
 console.log(board);
 board.addEventListener('click', click_event);
+
 function click_event(event){
-    if(event.target.classList.contains('sqr') && event.target.innerText){
+    var selection=document.querySelector('.Selected');
+    if(event.target.classList.contains('sqr') && event.target.innerText && selection==null){
         if(selection){
-            selection=document.querySelector('.Selected');
-            selection.classList.remove('Selected');
-            selection=document.querySelectorAll('.Possible');
-            selection.forEach(function(element){element.classList.remove('Possible')});
-            selection=false;
+            deselect(selection);
         }
         event.target.classList.add('Selected')
         console.log("Clicked: ", event.target.classList);
         selection=event.target;
         calc_mov(event.target);
     }
-    else if(event.target.classList.contains('Possible')){
-        move(event);
+    else if(event.target.classList.contains('Possible') && !event.target.innerText){
+        move(event, selection);
+        deselect(selection);
+    }
+    else{
+        if(selection){
+            deselect(selection);
+        }
     }
 }
 
-function move(event){
-    if(!event.target.innerText){
-        var request=new XMLHttpRequest();
-        var url='/move/'+parseInt(document.querySelector('.Selected').id)+'/'+parseInt(event.target.id);
-        request.open('POST', url);
-        request.send();
-        console.log('MOVED',url);
+function deselect(selection){
+    selection=document.querySelector('.Selected');
+    selection.classList.remove('Selected');
+    selection=document.querySelectorAll('.Possible');
+    selection.forEach(function(element){element.classList.remove('Possible')});
+    selection=false;
+}
 
+function move(event, selected){
+    if(event.target.innerText!=' '){
+        (async function(){
+            var request=new XMLHttpRequest();
+            var url='/move/'+parseInt(selected.id)+'/'+parseInt(event.target.id);
+            request.open('POST', url);
+            request.send();
+        });
+        event.target.innerText = selected.innerText;
+        selected.innerText=' ';
     }
 }
 
