@@ -97,30 +97,51 @@ function pawn_mvmt(target, position, possible){
 }
 
 function rook_mvmt(target, position, possible){
-    var nxt_pos, check, direction,
-        blocked=false;
+    var nxt_pos, check, 
+        direction=[-1, 1];
     if(target.innerText=='♜'){
-        direction=8;
+        direction.push(8);
     }
     else if(target.innerText=='♖'){
-        direction=-8;
-    }
-    nxt_pos=position;
-    for(var i=0;i<8;i++){
-        nxt_pos+=direction;
-        check=document.getElementById(nxt_pos);
-        if(nxt_pos>0 && nxt_pos<64){
-            console.log("Possible Move: ", nxt_pos);
-            if(!check.innerText){
-                if(!blocked){
-                    possible.push(check);
+        direction.push(-8);
+    }    
+    console.log("Direction: ", direction);
+
+    direction.forEach(function(element){
+        nxt_pos=position;
+        var blocked=false;
+        console.log("Direction: ", element);
+        for(var i=0;i<8;i++){
+            nxt_pos+=element;
+            check=document.getElementById(nxt_pos);
+            if(nxt_pos>=0 && nxt_pos<64 && !blocked){
+                if(nxt_pos%8==0 && position%8!=0 && position<nxt_pos){
+                        blocked=true;
+                        console.log(nxt_pos, "BLOCKED; end of row");
+                        break;
+                }
+                else if((nxt_pos+1)%8==0 && (position+1)%8!=0 && position>nxt_pos){
+                        blocked=true;
+                        console.log(nxt_pos, "BLOCKED; end of row");
+                        break;
+                }
+                if(!check.innerText){
+                    if(!blocked){
+                        console.log("Possible Move: ", check);
+                        possible.push(check);
+                    }
+                }
+                else{
+                    blocked=true;
+                    console.log(nxt_pos, "BLOCKED");
                 }
             }
             else{
-                blocked=true;
+                console.log("Bad direction: ", nxt_pos);
+                break;
             }
         }
-    }
+    })
     possible.forEach(function(element){
         element.classList.add('Possible');
     })
